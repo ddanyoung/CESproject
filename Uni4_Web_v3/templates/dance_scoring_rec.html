@@ -9,10 +9,6 @@
         <link rel="icon" type="image/x-icon" href="../static/assets/logo_balck.svg"/>
         <link href="../static/css/main.css" rel="stylesheet" />
         <link href="../static/css/anim.css" rel="stylesheet" />
-        <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script> -->
         <script src="{{ url_for('static', filename='node_modules/@mediapipe/camera_utils/camera_utils.js') }}" crossorigin="anonymous"></script>
         <script src="{{ url_for('static', filename='node_modules/@mediapipe/control_utils/control_utils.js') }}" crossorigin="anonymous"></script>
         <script src="{{ url_for('static', filename='node_modules/@mediapipe/drawing_utils/drawing_utils.js') }}" crossorigin="anonymous"></script>
@@ -52,13 +48,13 @@
         </nav>
         
         <div class="bg-rec" >
-            <div id="firework" style="width:50vw; position:absolute; top:100px; height:20vh; left: 25%; z-index: 999; display: none;">
+            <!-- <div id="firework" style="width:50vw; position:absolute; top:100px; height:20vh; left: 25%; z-index: 999; display: none;">
                 <div class="firework1" style="font-size: 100px; position: absolute; top: 28%; left: 81%; animation: 0.7s ease 0.2s infinite normal none running firework1;"></div>
                 <div class="firework2" style="font-size: 100px; position: absolute;"></div>
                 <div class="firework3" style="font-size: 100px; position: absolute;"></div>
                 <div class="firework4" style="font-size: 100px; position: absolute;"></div>
                 <div class="firework5" style="font-size: 100px; position: absolute;"></div>
-            </div>
+            </div> -->
             <!-- 앨범배경 -->
             <div class="album-bg">
                 <div class="album-filter d-flex flex-column justify-content-end align-items-center">
@@ -135,7 +131,6 @@
                         <canvas class="custom-video" id="webcamCanvas" style="transform: scaleX(-1);"></canvas>
                         <video class="custom-video" autoplay muted id="webcam" width="720" height="405" style="visibility: hidden;"></video>
                         <video class="custom-video" autoplay muted id="media_cam" width="720" height="405" style="display: none;"></video>
-                        
                     </div>
                 </div>
                 

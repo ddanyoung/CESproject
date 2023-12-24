@@ -78,6 +78,7 @@ function stopCamera() {
       scoreElement.textContent = "0";
       cameraRunning = false;
       animatable.style.display = "none";
+      clearInterval(intervalId);
     }
 }
 
@@ -99,7 +100,7 @@ function startCountdown() {
     }
   }, 1000);
   scoreTermValue.style.animation = "fontAnimation 0.5s linear 2";
-  document.getElementById("firework").style.display = "block";
+  // document.getElementById("firework").style.display = "block";
 }
 
 // 재생이 끝났을 때 이벤트 리스너 추가
@@ -118,8 +119,10 @@ videoElement.addEventListener("ended", function() {
   restartDialogBtn.style.display = "block";
   resulttDialogBtn.style.display = "block";
 
+  // 점수 애니메이션 없애기
   animatable.style.display = "none";
   // totalscore.style.display = "block";
+  clearInterval(intervalId);
 
   // if (scoreList.length > 0) {
   //   // 배열 요소의 합 계산
@@ -135,7 +138,6 @@ videoElement.addEventListener("ended", function() {
   // }
 });
 
-
 // 리스타트 함수
 function restartVideo() {
   var video = document.getElementById("target_video");
@@ -143,7 +145,7 @@ function restartVideo() {
   video.play(); // 동영상 재생
   document.getElementById("startDialog").style.display = "none";
   animatable.style.display = "block";
-  totalscore.style.display = 'none';
+  // totalscore.style.display = 'none';
 }
 
 // 사용자 포즈 검출
@@ -200,7 +202,7 @@ const user_pose = new Pose({
   });
 
 
-// target
+// target 포즈 검출
 async function processVideo() {
     await pose.send({ image: videoElement });
     requestAnimationFrame(processVideo);
@@ -255,6 +257,7 @@ pose.onResults((results) => {
 });
 processVideo();
 
+// 정규화 함수
 function minMaxNormalization(data, newMin = 0, newMax = 1) {
   const numCols = data[0].length; // 열의 수
 
@@ -267,10 +270,10 @@ function minMaxNormalization(data, newMin = 0, newMax = 1) {
       data[i][col] = newMin + ((data[i][col] - min) * (newMax - newMin)) / (max - min);
     }
   }
-
   return data;
 }
 
+// 점수 계산 함수
 function getScore(target_lm, user_lm) {
   let cosineSimilarities = [];
 
@@ -298,49 +301,103 @@ function getScore(target_lm, user_lm) {
   return Math.ceil(meanCosineSimilarity*10000)/100;
 }
 
+// score 강조 효과
+function updateScoreAndAnimate() {
+  const scoreValue = document.getElementById("score");
+  scoreTermValue.textContent = Math.floor(scoreValue.textContent);
+  animatable.play();
+  const scoreBox = document.querySelector('.score-box');
+
+  // 숫자에 따라 색상 및 애니메이션 처리
+  const score = Number(scoreElement.textContent);
+  let color = "white";
+  let bubbleColor = "white";
+
+  if (score < 60) {
+    // default values로 유지
+  } else if (score < 70) {
+    color = "#52b79a";
+    bubbleColor = "#52b79a";
+  } else if (score < 80) {
+    color = "#ffdd57";
+    bubbleColor = "#ffdd57";
+  } else if (score < 90) {
+    color = "#ff9100";
+    bubbleColor = "#ff9100";
+  } else {
+    color = "#f05164";
+    bubbleColor = "#f05164";
+  }
+
+  scoreTermValue.style.color = color;
+  scoreBox.style.setProperty('--bubble-color', bubbleColor);
+
+  // 애니메이션 처리 함수
+  function addAnimateClass() {
+    scoreBox.classList.add("animate");
+    setTimeout(() => {
+      scoreBox.classList.remove("animate");
+    }, 500);
+  }
+
+  // 80점 이상에서만 애니메이션 실행
+  if (score >= 70) {
+    if (!scoreBox.classList.contains("animate")) {
+      addAnimateClass();
+    } else {
+      clearTimeout(animateTimeout);
+      addAnimateClass();
+    }
+  }
+}
+
+// 1초마다 updateScoreAndAnimate 함수 호출
+let intervalId = setInterval(updateScoreAndAnimate, 1000);
+
+
 
 // 점수처리 애니매이션
-animatable.autoPlay = true;
-animatable.animation = "bounceIn";
-const scoreValue = document.getElementById("score");
-let scoreList = [];
-setInterval(() => {
-  scoreTermValue.textContent = Math.floor(scoreValue.textContent);
-  scoreList.push(scoreTermValue.textContent);
-  animatable.play();
-  if (Number(scoreValue.textContent) < 60) {
-    scoreTermValue.style.color = "white";
-  } else if (Number(scoreValue.textContent) < 70) {
-    scoreTermValue.style.color = "#52b79a";
-  } else if (Number(scoreValue.textContent) < 80) {
-    scoreTermValue.style.color = "#ffdd57";
-  } else if (Number(scoreValue.textContent) < 90) {
-    scoreTermValue.style.color = "#ff9100";
-  } else {
-    scoreTermValue.style.color = "#f05164";
-  }
-}, 1000);
+// animatable.autoPlay = true;
+// animatable.animation = "bounceIn";
+// const scoreValue = document.getElementById("score");
+// let scoreList = [];
+// setInterval(() => {
+//   scoreTermValue.textContent = Math.floor(scoreValue.textContent);
+//   scoreList.push(scoreTermValue.textContent);
+//   animatable.play();
+//   if (Number(scoreValue.textContent) < 60) {
+//     scoreTermValue.style.color = "white";
+//   } else if (Number(scoreValue.textContent) < 70) {
+//     scoreTermValue.style.color = "#52b79a";
+//   } else if (Number(scoreValue.textContent) < 80) {
+//     scoreTermValue.style.color = "#ffdd57";
+//   } else if (Number(scoreValue.textContent) < 90) {
+//     scoreTermValue.style.color = "#ff9100";
+//   } else {
+//     scoreTermValue.style.color = "#f05164";
+//   }
+// }, 1000);
 
 // 폭죽 효과
-const fRandomValue = [0, 0, 0, 0, 0];
-const speed = 0.7; // 더 빠르게 폭죽이 터지게 하고 싶은경우 값을 낮추기
-fRandomValue.forEach((value, i) => {
-  fRandomValue[i] = Math.floor(Math.random() * 10) / 10 + speed;
+// const fRandomValue = [0, 0, 0, 0, 0];
+// const speed = 0.7; // 더 빠르게 폭죽이 터지게 하고 싶은경우 값을 낮추기
+// fRandomValue.forEach((value, i) => {
+//   fRandomValue[i] = Math.floor(Math.random() * 10) / 10 + speed;
 
-  setInterval(() => {
-    // 점수에 따라 폭죽 효과를 보여주거나 숨깁니다.
-    if (Number(scoreValue.textContent) >= 75) {
-      document.getElementById("firework").style.display = "block";
-    } else {
-      document.getElementById("firework").style.display = "none";
-    }
+//   setInterval(() => {
+//     // 점수에 따라 폭죽 효과를 보여주거나 숨깁니다.
+//     if (Number(scoreValue.textContent) >= 75) {
+//       document.getElementById("firework").style.display = "block";
+//     } else {
+//       document.getElementById("firework").style.display = "none";
+//     }
 
-    // 폭죽 효과 애니메이션을 설정합니다.
-    document.getElementsByClassName(`firework${i + 1}`)[0].style.top =
-      Math.floor(Math.random() * 100).toString() + "%";
-    document.getElementsByClassName(`firework${i + 1}`)[0].style.left =
-      Math.floor(Math.random() * 100).toString() + "%";
-    document.getElementsByClassName(`firework${i + 1}`)[0].style.animation = `firework${i + 1} ${fRandomValue[i].toString()}s infinite`;
-    document.getElementsByClassName(`firework${i + 1}`)[0].style.animationDelay = "0.2s";
-  }, fRandomValue[i] * 1000);
-});
+//     // 폭죽 효과 애니메이션을 설정합니다.
+//     document.getElementsByClassName(`firework${i + 1}`)[0].style.top =
+//       Math.floor(Math.random() * 100).toString() + "%";
+//     document.getElementsByClassName(`firework${i + 1}`)[0].style.left =
+//       Math.floor(Math.random() * 100).toString() + "%";
+//     document.getElementsByClassName(`firework${i + 1}`)[0].style.animation = `firework${i + 1} ${fRandomValue[i].toString()}s infinite`;
+//     document.getElementsByClassName(`firework${i + 1}`)[0].style.animationDelay = "0.2s";
+//   }, fRandomValue[i] * 1000);
+// });
