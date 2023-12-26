@@ -339,6 +339,13 @@ body {
   border-radius: 100%;
 }
 
+.mp-video-btn.active{
+  height: 100%;
+  border-radius: 100%;
+  /* border: 2px solid #FF70C1; */
+  box-shadow: 0 0 0 2px #FF70C1;
+}
+
 button{
   border: transparent;
   background-color: transparent;
@@ -480,4 +487,13 @@ button{
   color: #fff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   text-align: center;
+}
+
+.mp-img{
+  border-radius: 10px;
+  filter: grayscale(100%);
+}
+
+.mp-img.active{
+  filter: none;
 }

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 app = Flask(__name__)
 app.secret_key = 'Uni4'
 
@@ -33,6 +33,19 @@ def cloth_change():
 @app.route('/motion_deepfake')
 def motion_deepfake():
     return render_template('motion_deepfake.html')
+
+@app.route('/button_clicked', methods=['POST'])
+def handle_button_click():
+    if request.method == 'POST':
+        button_info = request.json.get('buttonInfo')  # 클라이언트에서 전송된 버튼 정보
+
+        # 예시: 모델 정보와 비디오 정보에 접근하여 활용
+        model_info = button_info.get('modelInfo')
+        video_info = button_info.get('videoInfo')
+
+        # 여기서 원하는 작업 수행
+        # 예를 들어, 다른 라우트로 이동하거나 데이터를 이용하여 템플릿 렌더링 등을 수행할 수 있습니다.
+        return render_template('motion_deepfake_result.html', model_info=model_info, video_info=video_info)
 
 @app.route('/motion_deepfake/result')
 def motion_deepfake_result():
