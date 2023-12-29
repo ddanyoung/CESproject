@@ -41,7 +41,17 @@
                         {% for cover in video_cover %}
                         <div class="col-12 col-sm-5 col-md-2 mb-5">
                             <div class="post-entry text-center">
-                                <a href="{{ url_for('dance_scoring_rec', video=cover) }}" class="post-thumbnail"><img src="{{ url_for('static', filename='assets/dance/album/' + cover) }}" alt="Image" class="album"></a>
+                                <div class="post-thumbnail">
+                                    <img src="{{ url_for('static', filename='assets/dance/album/' + cover) }}" alt="Image" class="album">
+                                    <div class="album-menu">
+                                        <a href="{{ url_for('dance_scoring_demo', video=cover) }}" class="menu-opt">Demo</a>
+                                        <a href="{{ url_for('dance_scoring_rec', video=cover) }}" class="menu-opt">Game</a>
+                                        <!-- <div class="menu-opt">Demo</div> -->
+                                        <!-- <div class="menu-opt">Game</div> -->
+                                    </div>
+                                </div>
+                                <!-- <a href="{{ url_for('dance_scoring_rec', video=cover) }}" class="post-thumbnail">
+                                </a> -->
                                 <div class="post-content-entry">
                                     <span class="music-title">{{ cover.split('-')[1].split('.')[0] }}</span>
                                     <div class="meta">

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquare.css">
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <title>Dance With Me</title>
+        <link rel="icon" type="image/x-icon" href="../static/assets/logo_balck.svg"/>
+        <link href="../static/css/main.css" rel="stylesheet" />
+        <link href="../static/css/anim.css" rel="stylesheet" />
+        <script src="{{ url_for('static', filename='node_modules/@mediapipe/camera_utils/camera_utils.js') }}" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='node_modules/@mediapipe/control_utils/control_utils.js') }}" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='node_modules/@mediapipe/drawing_utils/drawing_utils.js') }}" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='node_modules/@mediapipe/pose/pose.js') }}" crossorigin="anonymous"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@proyecto26/animatable-component@1.1.10/dist/animatable-component/animatable-component.esm.js"></script>
+
+        <style>
+            .album-bg {
+                width: 100%;
+                height: 40%;
+                background: url('../static/assets/dance/album/{{ album_file }}');
+                padding: 30px 120p/x;
+                opacity: 1;
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                overflow: hidden;
+                background-size: cover;
+                background-position: center;
+                }
+        </style>
+    </head>
+    <body id="page-top">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav" style="margin-top: 30px;">
+            <div class="container" style="max-width: 1680px !important; padding-left: 5em; padding-right: 5em;">
+                <a class="navbar-brand" href="#page-top" style="background-image: url('../static/assets/logo.svg'); background-size: contain; background-repeat: no-repeat; display: block; width: 150px; height: 40px;"></a>
+                <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                        <li class="nav-item"><a class="nav-link deactive" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="/dance_scoring">Dance Scoring</a></li>
+                        <li class="nav-item"><a class="nav-link deactive" href="/cloth_change">Outfit Change</a></li>
+                        <li class="nav-item"><a class="nav-link deactive" href="/motion_deepfake">Cosplay</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="bg-rec" >
+            <!-- <div id="firework" style="width:50vw; position:absolute; top:100px; height:20vh; left: 25%; z-index: 999; display: none;">
+                <div class="firework1" style="font-size: 100px; position: absolute; top: 28%; left: 81%; animation: 0.7s ease 0.2s infinite normal none running firework1;"></div>
+                <div class="firework2" style="font-size: 100px; position: absolute;"></div>
+                <div class="firework3" style="font-size: 100px; position: absolute;"></div>
+                <div class="firework4" style="font-size: 100px; position: absolute;"></div>
+                <div class="firework5" style="font-size: 100px; position: absolute;"></div>
+            </div> -->
+            <!-- 앨범배경 -->
+            <div class="album-bg">
+                <div class="album-filter d-flex flex-column justify-content-end align-items-center">
+                    <div class="dance-name d-flex justify-content-center align-items-end">
+                        <h1>{{ video_file.split('.')[0].replace('-', ' - ').upper() }}</h1>
+                    </div>
+                    <div class="container-fluid">
+                        <div class="row justify-content-center align-items-end">
+                            <!-- 점수창 -->
+                            <div class="col-4 score-box d-flex flex-column align-items-center justify-content-center">
+                                <div class="text-white">
+                                    Similarity
+                                </div>
+                                <div class="score">
+                                  <animatable-component id="animatable" autoplay easing="ease-in-out" duration="800" style="display: block;">
+                                    <h1 class="score" style="font-size: 100px; font-weight: 800;">
+                                      <span id="scoreTermValue">0</span>
+                                    </h1>
+                                  </animatable-component>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 동영상 -->
+            <div class="lock-screen">
+                <!-- 시작 버튼 -->
+                <div id="startDialog">
+                    <button id="startDialogBtn" style="display: block;" onclick="startCountdown()">
+                      START
+                    </button>
+                </div>
+                <!-- 비디오 -->
+                <div class="video d-flex">
+                    <div class="target-video col-6">
+                        <canvas id="target_outputCanvas" class="custom-video"></canvas>
+                        <video class="custom-video" id="target_video" controls width="720" height="405">
+                            <source src="{{ url_for('static', filename='assets/dance/target_' + video_file) }}" type="video/mp4">
+                            no video
+                        </video>
+                    </div>
+
+                    <div class="user-video col-6 text-white">
+                        <canvas id="user_outputCanvas" class="custom-video"></canvas>
+                        <video class="custom-video" id="user_video" controls muted width="720" height="405">
+                            <source src="{{ url_for('static', filename='assets/dance/' + video_file) }}" type="video/mp4">
+                            no video
+                        </video>
+                    </div>
+
+                </div>
+                
+            </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../static/js/demo.js"></script>
+    </body>
+</html>

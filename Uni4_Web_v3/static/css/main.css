@@ -162,6 +162,46 @@ body {
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
 }
 
+.post-thumbnail{
+  position: relative;
+  display: inline-block;
+}
+
+.album-menu{
+  width: 80%;
+  height: 100%;
+  position: absolute;
+  left: 10%;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.9rem;
+  background-color: #00000080;
+  backdrop-filter: blur(2px);
+  opacity: 0;
+}
+
+.menu-opt{
+  width: 60%;
+  height: 15%;
+  font-size: 15px;
+  color: #fff;
+  background-color: #FBB13C;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+  text-decoration: none; /* 링크의 밑줄 제거 */
+}
+
+.post-thumbnail:hover .album-menu{
+  opacity: 1;
+}
+
 .music-title{
   font-size: 18px;
   font-weight: 800;

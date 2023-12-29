@@ -24,6 +24,13 @@ def dance_scoring_rec():
     session['video_file'] = video_file
     return render_template('dance_scoring_rec.html', video_file=video_file, album_file = album_file)
 
+@app.route('/dance_scoring/demo', methods=['GET', 'POST'])
+def dance_scoring_demo():
+    album_file = request.args.get('video', '')
+    video_file = album_file.split('.')[0] + '.mp4'
+    session['video_file'] = video_file
+    return render_template('dance_scoring_demo.html', video_file=video_file, album_file = album_file)
+
 # 의상 체인지
 @app.route('/cloth_change')
 def cloth_change():
