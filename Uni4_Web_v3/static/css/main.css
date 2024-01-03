@@ -422,6 +422,7 @@ button{
   border: 3px solid #ffffffab;
   border-radius: 20px;
   text-align: center;
+  position: relative;
 }
 
 .score{

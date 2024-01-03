@@ -71,7 +71,7 @@
                                 </div>
                                 <div class="score">
                                   <span id="score" style="display: none;">0</span>
-                                  <animatable-component id="animatable" autoplay easing="ease-in-out" duration="800" style="display: none;">
+                                  <animatable-component id="animatable" autoplay easing="ease-in-out" duration="600" style="display: none;">
                                     <h1 class="score" style="font-size: 100px; font-weight: 800;">
                                       <span id="scoreTermValue">0</span>
                                     </h1>
@@ -120,6 +120,10 @@
                 <!-- 비디오 -->
                 <div class="video d-flex">
                     <div class="target-video col-6">
+                        <!-- <video class="custom-video" id="target_video2" controls>
+                            <source src="{{ url_for('static', filename='assets/dance/' + video_file) }}" type="video/mp4">
+                            no video
+                        </video> -->
                         <video class="custom-video" id="target_video" controls>
                             <source src="{{ url_for('static', filename='assets/dance/' + video_file) }}" type="video/mp4">
                             no video
@@ -136,6 +140,6 @@
                 
             </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="../static/js/webcam.js"></script>
+        <script src="../static/js/webcam2.js"></script>
     </body>
 </html>
